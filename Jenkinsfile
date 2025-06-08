@@ -22,7 +22,7 @@ pipeline{
 		
 		stage('Run Application'){
 			steps {
-				sh 'java -jar target/Maven_App-1.0-SNAPSHOT.jar'
+				sh 'java -jar target/First_Maven_App-1.0-SNAPSHOT.jar'
 			}
 		}
 	}
