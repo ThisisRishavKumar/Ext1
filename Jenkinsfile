@@ -1,45 +1,37 @@
 pipeline{
 	agent any
-	environment {
-		LANG='en_US.UTF-8'
-		LC_ALL='en_US.UTF-8'
-	}
 	tools{
 		maven 'Maven'
 	}
-	
-	stages {
+	stages{
 		stage('Checkout'){
 			steps{
 				git branch : 'master' , url : 'https://github.com/ThisisRishavKumar/Ext1.git'
 			}
 		}
-		
 		stage('Build') {
-			steps {
-				sh 'mvn clean install'
-			}
-		}
-		
-		stage('Archieve') {
-			steps{
-				archiveArtifacts artifacts : 'target/*.war', fingerprint:true
-			}
-		}
-		stage('Deploy'){
 			steps{
 				sh 'mvn clean package'
-				sh 'ansible-playbook ansible/playbook.yml -i ansible/host.ini'
+			}
+		}
+		stage('Test') {
+			steps {
+				sh 'mvn test'
+			}
+		}
+		
+		stage('Run Application'){
+			steps {
+				sh 'java -jar target/Maven_App-1.0-SNAPSHOT.jar'
 			}
 		}
 	}
-	post{
+	post {
 		success {
-			echo 'Deployed Successfully'
+			echo 'Successfuly deployed'
 		}
-		
-		failure {
-			echo 'Deployment Failed'
+		failure{
+			echo 'Error in Deployment'
 		}
 	}
 }
